@@ -55,9 +55,9 @@ Edit `src/config/author.js` and `src/config/site.js` for the About page and site
 3. Settings → **Upload** → **Upload presets** → **Add upload preset**.
 4. Set **Signing mode** to **Unsigned**. Do not put the API secret in this app.
 5. Recommended preset options:
-   - Folder: `blog` (or leave blank)
-   - Unique filename: on
-   - Allowed formats: `jpg, png, webp, gif`
+   - Folder: `blo
+   - Allowed formats: `jpgg` (or leave blank)
+   - Unique filename: on, png, webp, gif`
    - Max file size: 5 MB
 6. Save the preset and copy its **Preset name**.
 

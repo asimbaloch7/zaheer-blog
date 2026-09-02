@@ -1,5 +1,5 @@
 export const site = {
-  title: 'Blogs from the Zaheer Ahmed',
+  title: 'Blogs from Zaheer Ahmed',
   shortTitle: 'Zaheer Ahmed',
   tagline:
     'Research notes on bacteriology, virology, and the living world at microscopic scale.',
