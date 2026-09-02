@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Notes from the Bench">
+  <rect width="64" height="64" rx="12" fill="#134844"/>
+  <circle cx="32" cy="32" r="16" fill="none" stroke="#f6f3ec" stroke-width="2.5"/>
+  <circle cx="32" cy="32" r="11" fill="none" stroke="#dceeea" stroke-width="1.25" stroke-dasharray="3 3"/>
+  <circle cx="26" cy="28" r="2.2" fill="#b7d8d2"/>
+  <circle cx="36" cy="24" r="1.6" fill="#dceeea"/>
+  <circle cx="38" cy="35" r="2.6" fill="#f0f7f6"/>
+  <circle cx="28" cy="38" r="1.4" fill="#b7d8d2"/>
+</svg>

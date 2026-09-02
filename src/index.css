@@ -1,0 +1,184 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+    background-image:
+      radial-gradient(circle at top, rgba(19, 72, 68, 0.04), transparent 38%);
+  }
+
+  ::selection {
+    @apply bg-pine-100 text-pine-900;
+  }
+}
+
+@layer components {
+  .page-wrap {
+    @apply mx-auto w-full max-w-6xl px-5;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-md bg-pine-800 px-4 py-2 text-sm font-medium text-paper transition hover:bg-pine-900 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-md border border-paper-dark bg-paper-card px-4 py-2 text-sm font-medium text-ink transition hover:bg-paper disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center rounded-md bg-red-800 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-900 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .input {
+    @apply w-full rounded-md border border-paper-dark bg-paper-card px-3 py-2 text-sm text-ink outline-none ring-pine-700/30 transition focus:border-pine-700 focus:ring-2;
+  }
+
+  .label {
+    @apply text-sm font-medium text-ink;
+  }
+}
+
+/* Reading column: ~65–75 characters, serif body, binomial italics */
+.post-content,
+.tiptap-editor {
+  @apply font-serif text-[1.125rem] leading-[1.8] text-ink;
+}
+
+.post-content > *:first-child,
+.tiptap-editor > *:first-child {
+  margin-top: 0;
+}
+
+.post-content p,
+.tiptap-editor p {
+  margin: 1.15em 0;
+}
+
+.post-content em,
+.post-content i,
+.tiptap-editor em {
+  font-style: italic;
+}
+
+.post-content strong,
+.tiptap-editor strong {
+  font-weight: 600;
+}
+
+.post-content a,
+.tiptap-editor a {
+  @apply text-pine-800 underline decoration-pine-200 underline-offset-2 hover:decoration-pine-800;
+}
+
+.post-content h2,
+.tiptap-editor h2 {
+  @apply mt-10 mb-3 font-serif text-[1.65rem] leading-snug text-ink;
+}
+
+.post-content h3,
+.tiptap-editor h3 {
+  @apply mt-8 mb-2 font-serif text-xl leading-snug text-ink;
+}
+
+.post-content h4,
+.tiptap-editor h4 {
+  @apply mt-6 mb-2 font-serif text-lg text-ink;
+}
+
+.post-content blockquote,
+.tiptap-editor blockquote {
+  @apply my-6 border-l-[3px] border-pine-700 py-1 pl-5 text-[1.05rem] italic text-ink-muted;
+}
+
+.post-content ul,
+.tiptap-editor ul {
+  @apply my-4 list-disc pl-6;
+}
+
+.post-content ol,
+.tiptap-editor ol {
+  @apply my-4 list-decimal pl-6;
+}
+
+.post-content li,
+.tiptap-editor li {
+  @apply my-1;
+}
+
+.post-content sub,
+.tiptap-editor sub {
+  font-size: 0.75em;
+  vertical-align: sub;
+}
+
+.post-content sup,
+.tiptap-editor sup {
+  font-size: 0.75em;
+  vertical-align: super;
+}
+
+.post-content figure,
+.tiptap-editor figure,
+.post-figure {
+  @apply my-8;
+}
+
+.post-content img,
+.tiptap-editor img {
+  @apply mx-auto h-auto max-h-[32rem] w-auto max-w-full rounded-md;
+}
+
+.post-content figcaption,
+.tiptap-editor figcaption {
+  @apply mt-2 text-center font-sans text-sm italic text-ink-muted;
+}
+
+.post-content table,
+.tiptap-editor table {
+  @apply my-6 w-full border-collapse overflow-hidden font-sans text-[0.95rem];
+}
+
+.post-content th,
+.post-content td,
+.tiptap-editor th,
+.tiptap-editor td {
+  @apply border border-paper-dark px-3 py-2 text-left align-top;
+}
+
+.post-content th,
+.tiptap-editor th {
+  @apply bg-pine-50 font-semibold text-pine-900;
+}
+
+.post-content hr,
+.tiptap-editor hr {
+  @apply my-10 border-paper-dark;
+}
+
+.tiptap-editor p.is-editor-empty:first-child::before,
+.tiptap-editor p.is-empty:first-child::before {
+  content: attr(data-placeholder);
+  @apply pointer-events-none float-left h-0 text-ink-faint;
+}
+
+.tiptap-editor .selectedCell::after {
+  background: rgba(19, 72, 68, 0.08);
+}
+
+.ProseMirror {
+  min-height: 28rem;
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+.ProseMirror-focused {
+  outline: none;
+}
