@@ -1,20 +1,26 @@
+import { useMemo, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import SEO from '../components/seo/SEO'
+import ArticleSkeleton from '../components/posts/ArticleSkeleton'
+import AuthorBlock from '../components/posts/AuthorBlock'
 import PostContent from '../components/posts/PostContent'
+import ReadingProgress from '../components/posts/ReadingProgress'
 import References from '../components/posts/References'
 import RelatedPosts from '../components/posts/RelatedPosts'
+import ShareButtons from '../components/posts/ShareButtons'
+import TableOfContents from '../components/posts/TableOfContents'
 import TagBadge from '../components/posts/TagBadge'
-import Spinner from '../components/ui/Spinner'
+import BackToTop from '../components/ui/BackToTop'
 import { usePost } from '../hooks/usePost'
 import { usePosts } from '../hooks/usePosts'
 import { useAuth } from '../hooks/useAuth'
 import { getRelatedPosts } from '../firebase/posts'
-import { formatDate } from '../utils/dates'
-import { readingTimeLabel } from '../utils/readingTime'
 import { excerptFromHtml } from '../utils/html'
+import { prepareArticle } from '../utils/article'
 
 export default function Post() {
   const { slug } = useParams()
+  const articleRef = useRef(null)
   const { isAdmin, loading: authLoading } = useAuth()
   const { post, loading, error } = usePost({
     slug,
@@ -22,8 +28,9 @@ export default function Post() {
     ready: !authLoading,
   })
   const { posts } = usePosts()
+  const prepared = useMemo(() => prepareArticle(post?.content), [post?.content])
 
-  if (loading) return <Spinner label="Loading post" />
+  if (loading || authLoading) return <ArticleSkeleton />
 
   if (error || !post) {
     return (
@@ -54,7 +61,8 @@ export default function Post() {
   const description = post.excerpt || excerptFromHtml(post.content)
 
   return (
-    <article className="page-wrap py-10 md:py-14">
+    <article ref={articleRef} className="pb-16 pt-10 md:pb-24 md:pt-16">
+      <ReadingProgress targetRef={articleRef} />
       <SEO
         title={post.title}
         description={description}
@@ -63,49 +71,83 @@ export default function Post() {
         type="article"
       />
 
-      <header className="mx-auto max-w-[72ch]">
+      <header className="page-wrap mx-auto max-w-4xl">
         {post.status === 'draft' && (
-          <p className="mb-4 text-sm font-medium text-amber-800">Draft preview — not visible to readers.</p>
+          <p className="mb-5 inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-900">
+            Draft preview — not visible to readers
+          </p>
         )}
-        <p className="text-xs uppercase tracking-[0.18em] text-ink-faint">
-          {formatDate(post.publishedAt || post.updatedAt)}
-          <span className="mx-2">·</span>
-          {readingTimeLabel(post.readingTimeMinutes)}
-        </p>
-        <h1 className="mt-3 font-serif text-4xl leading-tight text-ink md:text-[2.6rem]">
-          {post.title}
-        </h1>
         {post.tags?.length > 0 && (
-          <div className="mt-5 flex flex-wrap gap-1.5">
+          <div className="mb-5 flex flex-wrap gap-2">
             {post.tags.map((tag) => (
               <TagBadge key={tag} tag={tag} to={`/?tag=${encodeURIComponent(tag)}`} />
             ))}
           </div>
         )}
+        <h1 className="text-balance font-serif text-4xl font-semibold leading-[1.08] tracking-[-0.025em] text-ink sm:text-5xl md:text-[3.5rem]">
+          {post.title}
+        </h1>
+        {description && (
+          <p className="mt-6 max-w-3xl text-pretty text-lg leading-relaxed text-ink-muted sm:text-xl">
+            {description}
+          </p>
+        )}
+        <div className="mt-8 flex flex-col gap-5 border-t border-paper-dark pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <AuthorBlock post={post} />
+          <div className="lg:hidden">
+            <ShareButtons title={post.title} />
+          </div>
+        </div>
         {isAdmin && (
-          <Link to={`/admin/edit/${post.id}`} className="mt-4 inline-block text-sm text-pine-800">
+          <Link to={`/admin/edit/${post.id}`} className="mt-5 inline-block text-sm font-semibold text-pine-800 focus-ring">
             Edit this post
           </Link>
         )}
       </header>
 
       {post.coverImageUrl && (
-        <figure className="mx-auto mt-8 max-w-4xl">
+        <figure className="page-wrap mx-auto mt-10 max-w-6xl md:mt-12">
           <img
             src={post.coverImageUrl}
             alt=""
-            className="w-full rounded-lg object-cover"
+            className="max-h-[38rem] w-full rounded-2xl border border-paper-dark/70 object-cover shadow-sm"
             loading="eager"
           />
         </figure>
       )}
 
-      <div className="mx-auto mt-10 max-w-[72ch]">
-        <PostContent html={post.content} />
-        <References references={post.references} />
+      <div className="page-wrap mx-auto mt-12 grid max-w-7xl gap-8 lg:grid-cols-[7rem_minmax(0,68ch)_13rem] lg:justify-center lg:gap-10">
+        <aside className="hidden lg:block lg:pt-1">
+          <div className="sticky top-28 hidden lg:flex lg:flex-col lg:items-center">
+            <p className="mb-3 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-ink-faint">
+              Share
+            </p>
+            <ShareButtons title={post.title} vertical />
+          </div>
+        </aside>
+
+        <div className="min-w-0">
+          <div className="lg:hidden">
+            <TableOfContents headings={prepared.headings} />
+          </div>
+          <PostContent html={prepared.html} />
+          <References references={post.references} />
+          <div className="mt-12">
+            <AuthorBlock post={post} expanded />
+          </div>
+        </div>
+
+        <aside className="hidden lg:block">
+          <div className="sticky top-28">
+            <TableOfContents headings={prepared.headings} />
+          </div>
+        </aside>
       </div>
 
-      <RelatedPosts posts={related} />
+      <div className="page-wrap">
+        <RelatedPosts posts={related} />
+      </div>
+      <BackToTop />
     </article>
   )
 }

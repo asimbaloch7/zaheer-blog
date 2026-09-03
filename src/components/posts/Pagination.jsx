@@ -4,10 +4,10 @@ export default function Pagination({ page, totalPages, onChange }) {
   const pages = Array.from({ length: totalPages }, (_, index) => index + 1)
 
   return (
-    <nav className="mt-10 flex items-center justify-center gap-2" aria-label="Pagination">
+    <nav className="mt-12 flex items-center justify-center gap-2" aria-label="Pagination">
       <button
         type="button"
-        className="btn-secondary px-3 py-1.5 text-sm"
+        className="btn-secondary px-3 text-sm"
         disabled={page === 1}
         onClick={() => onChange(page - 1)}
       >
@@ -17,10 +17,10 @@ export default function Pagination({ page, totalPages, onChange }) {
         <button
           key={item}
           type="button"
-          className={`min-w-[2.25rem] rounded-md px-2 py-1.5 text-sm ${
+          className={`min-h-10 min-w-10 rounded-lg px-2 py-1.5 text-sm font-semibold transition-colors focus-ring ${
             item === page
-              ? 'bg-pine-800 text-paper'
-              : 'text-ink-muted hover:bg-paper-dark'
+              ? 'bg-pine-800 text-paper shadow-sm'
+              : 'text-ink-muted hover:bg-pine-50 hover:text-pine-800'
           }`}
           onClick={() => onChange(item)}
           aria-current={item === page ? 'page' : undefined}
@@ -30,7 +30,7 @@ export default function Pagination({ page, totalPages, onChange }) {
       ))}
       <button
         type="button"
-        className="btn-secondary px-3 py-1.5 text-sm"
+        className="btn-secondary px-3 text-sm"
         disabled={page === totalPages}
         onClick={() => onChange(page + 1)}
       >

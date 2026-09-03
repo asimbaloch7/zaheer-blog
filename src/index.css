@@ -8,46 +8,75 @@
   }
 
   body {
-    @apply bg-paper font-sans text-ink antialiased;
+    @apply min-h-screen bg-paper font-sans text-ink antialiased;
     background-image:
-      radial-gradient(circle at top, rgba(19, 72, 68, 0.04), transparent 38%);
+      radial-gradient(circle at 50% -15%, rgba(19, 72, 68, 0.075), transparent 34rem);
+    font-feature-settings: "kern" 1, "liga" 1;
   }
 
   ::selection {
     @apply bg-pine-100 text-pine-900;
   }
+
+  :focus-visible {
+    outline: 2px solid #1a5c56;
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
 
 @layer components {
   .page-wrap {
-    @apply mx-auto w-full max-w-6xl px-5;
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-7 lg:px-8;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-md bg-pine-800 px-4 py-2 text-sm font-medium text-paper transition hover:bg-pine-900 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex min-h-10 items-center justify-center rounded-lg bg-pine-800 px-4 py-2 text-sm font-semibold text-paper shadow-sm transition-all duration-200 hover:-translate-y-px hover:bg-pine-900 hover:shadow disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-md border border-paper-dark bg-paper-card px-4 py-2 text-sm font-medium text-ink transition hover:bg-paper disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex min-h-10 items-center justify-center rounded-lg border border-paper-dark bg-paper-card px-4 py-2 text-sm font-semibold text-ink shadow-sm transition-all duration-200 hover:-translate-y-px hover:border-pine-200 hover:bg-pine-50 disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .btn-danger {
-    @apply inline-flex items-center justify-center rounded-md bg-red-800 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-900 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex min-h-10 items-center justify-center rounded-lg bg-red-800 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-px hover:bg-red-900 disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .input {
-    @apply w-full rounded-md border border-paper-dark bg-paper-card px-3 py-2 text-sm text-ink outline-none ring-pine-700/30 transition focus:border-pine-700 focus:ring-2;
+    @apply min-h-11 w-full rounded-lg border border-paper-dark bg-paper-card px-3.5 py-2.5 text-sm text-ink outline-none ring-pine-700/20 transition duration-200 placeholder:text-ink-faint focus:border-pine-700 focus:ring-4;
   }
 
   .label {
-    @apply text-sm font-medium text-ink;
+    @apply text-sm font-semibold text-ink;
+  }
+
+  .focus-ring {
+    @apply rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-pine-700 focus-visible:ring-offset-2 focus-visible:ring-offset-paper;
+  }
+
+  .social-button {
+    @apply inline-flex h-9 w-9 items-center justify-center rounded-full border border-paper-dark bg-paper-card text-ink-muted shadow-sm transition-all duration-200 hover:-translate-y-px hover:border-pine-200 hover:bg-pine-50 hover:text-pine-800;
   }
 }
 
 /* Reading column: ~65–75 characters, serif body, binomial italics */
 .post-content,
 .tiptap-editor {
-  @apply font-serif text-[1.125rem] leading-[1.8] text-ink;
+  @apply font-serif text-[1.0625rem] leading-[1.78] text-ink sm:text-[1.125rem];
 }
 
 .post-content > *:first-child,
@@ -57,7 +86,7 @@
 
 .post-content p,
 .tiptap-editor p {
-  margin: 1.15em 0;
+  margin: 1.25em 0;
 }
 
 .post-content em,
@@ -73,42 +102,86 @@
 
 .post-content a,
 .tiptap-editor a {
-  @apply text-pine-800 underline decoration-pine-200 underline-offset-2 hover:decoration-pine-800;
+  @apply rounded-sm font-medium text-pine-800 underline decoration-pine-200 decoration-1 underline-offset-[3px] transition-colors hover:decoration-pine-800;
 }
 
 .post-content h2,
 .tiptap-editor h2 {
-  @apply mt-10 mb-3 font-serif text-[1.65rem] leading-snug text-ink;
+  @apply mb-4 mt-14 scroll-mt-28 font-sans text-[1.65rem] font-bold leading-tight tracking-[-0.02em] text-ink sm:text-[1.8rem];
 }
 
 .post-content h3,
 .tiptap-editor h3 {
-  @apply mt-8 mb-2 font-serif text-xl leading-snug text-ink;
+  @apply mb-3 mt-10 scroll-mt-28 font-sans text-[1.3rem] font-bold leading-snug tracking-[-0.015em] text-ink;
 }
 
 .post-content h4,
 .tiptap-editor h4 {
-  @apply mt-6 mb-2 font-serif text-lg text-ink;
+  @apply mb-2 mt-8 font-sans text-lg font-bold text-ink;
+}
+
+.post-content .heading-anchor {
+  @apply ml-2 no-underline text-pine-200 opacity-0 transition-opacity;
+}
+
+.post-content h2[id]:hover .heading-anchor,
+.post-content h3[id]:hover .heading-anchor,
+.post-content .heading-anchor:focus-visible {
+  @apply opacity-100;
 }
 
 .post-content blockquote,
 .tiptap-editor blockquote {
-  @apply my-6 border-l-[3px] border-pine-700 py-1 pl-5 text-[1.05rem] italic text-ink-muted;
+  @apply relative my-9 rounded-r-xl border-l-4 border-pine-700 bg-pine-50 px-6 py-5 text-[1.08rem] italic leading-relaxed text-ink-muted;
+}
+
+.post-content blockquote p:first-child,
+.tiptap-editor blockquote p:first-child {
+  @apply mt-0;
+}
+
+.post-content blockquote p:last-child,
+.tiptap-editor blockquote p:last-child {
+  @apply mb-0;
 }
 
 .post-content ul,
 .tiptap-editor ul {
-  @apply my-4 list-disc pl-6;
+  @apply my-6 list-disc space-y-2 pl-7 marker:text-pine-700;
 }
 
 .post-content ol,
 .tiptap-editor ol {
-  @apply my-4 list-decimal pl-6;
+  @apply my-6 list-decimal space-y-2 pl-7 marker:font-sans marker:font-semibold marker:text-pine-700;
 }
 
 .post-content li,
 .tiptap-editor li {
+  @apply pl-1;
+}
+
+.post-content li > p,
+.tiptap-editor li > p {
   @apply my-1;
+}
+
+.post-content :not(pre) > code,
+.tiptap-editor :not(pre) > code {
+  @apply rounded-md border border-paper-dark bg-paper-card px-1.5 py-0.5 font-mono text-[0.86em] font-medium text-pine-900;
+}
+
+.post-content pre,
+.tiptap-editor pre {
+  @apply relative my-8 overflow-x-auto rounded-xl border border-slate-700 bg-[#17211f] p-5 pt-12 font-mono text-[0.875rem] leading-relaxed text-slate-100 shadow-sm;
+}
+
+.post-content pre code,
+.tiptap-editor pre code {
+  @apply block min-w-max bg-transparent p-0 text-inherit;
+}
+
+.post-content .code-copy-button {
+  @apply absolute right-3 top-3 rounded-md border border-white/15 bg-white/10 px-2.5 py-1 font-sans text-[0.7rem] font-semibold text-slate-200 transition hover:bg-white/20 hover:text-white;
 }
 
 .post-content sub,
@@ -126,29 +199,35 @@
 .post-content figure,
 .tiptap-editor figure,
 .post-figure {
-  @apply my-8;
+  @apply my-10;
 }
 
 .post-content img,
 .tiptap-editor img {
-  @apply mx-auto h-auto max-h-[32rem] w-auto max-w-full rounded-md;
+  @apply mx-auto h-auto max-h-[38rem] w-auto max-w-full rounded-xl border border-paper-dark/70 shadow-sm;
 }
 
 .post-content figcaption,
 .tiptap-editor figcaption {
-  @apply mt-2 text-center font-sans text-sm italic text-ink-muted;
+  @apply mx-auto mt-3 max-w-2xl text-center font-sans text-[0.8125rem] leading-relaxed text-ink-muted;
 }
 
 .post-content table,
 .tiptap-editor table {
-  @apply my-6 w-full border-collapse overflow-hidden font-sans text-[0.95rem];
+  @apply my-8 w-full border-collapse overflow-hidden font-sans text-[0.9rem] leading-relaxed;
+}
+
+.post-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .post-content th,
 .post-content td,
 .tiptap-editor th,
 .tiptap-editor td {
-  @apply border border-paper-dark px-3 py-2 text-left align-top;
+  @apply border border-paper-dark px-4 py-3 text-left align-top;
 }
 
 .post-content th,
@@ -158,7 +237,7 @@
 
 .post-content hr,
 .tiptap-editor hr {
-  @apply my-10 border-paper-dark;
+  @apply my-14 border-paper-dark;
 }
 
 .tiptap-editor p.is-editor-empty:first-child::before,
@@ -181,4 +260,20 @@
 
 .ProseMirror-focused {
   outline: none;
+}
+
+main > article,
+main > div {
+  animation: content-enter 420ms ease-out both;
+}
+
+@keyframes content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

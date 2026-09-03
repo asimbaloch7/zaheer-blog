@@ -2,9 +2,9 @@ import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import SEO from '../components/seo/SEO'
 import PostCard from '../components/posts/PostCard'
+import PostCardSkeleton from '../components/posts/PostCardSkeleton'
 import Pagination from '../components/posts/Pagination'
 import TagBadge from '../components/posts/TagBadge'
-import Spinner from '../components/ui/Spinner'
 import { usePosts } from '../hooks/usePosts'
 import { site } from '../config/site'
 import { SUGGESTED_TAGS, POSTS_PER_PAGE } from '../utils/constants'
@@ -54,34 +54,48 @@ export default function Home() {
   }
 
   return (
-    <div className="page-wrap py-10 md:py-14">
+    <div className="pb-16 md:pb-24">
       <SEO description={site.description} path="/" />
 
-      <section className="mx-auto max-w-3xl text-center">
-        <p className="text-xs uppercase tracking-[0.22em] text-pine-700">A microbiology notebook</p>
-        <h1 className="mt-3 font-serif text-4xl leading-tight text-ink md:text-5xl">{site.title}</h1>
-        <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-ink-muted md:text-lg">
-          {site.tagline}
-        </p>
+      <section className="border-b border-paper-dark/80">
+        <div className="page-wrap py-14 text-center sm:py-20 md:py-24">
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-pine-700">
+            A microbiology notebook
+          </p>
+          <h1 className="mx-auto mt-4 max-w-4xl text-balance font-serif text-4xl font-semibold leading-[1.08] tracking-[-0.03em] text-ink sm:text-5xl md:text-6xl">
+            {site.title}
+          </h1>
+          <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-8 text-ink-muted">
+            {site.tagline}
+          </p>
+        </div>
       </section>
 
-      <form className="mx-auto mt-10 flex max-w-xl gap-2" onSubmit={onSearch}>
-        <label className="sr-only" htmlFor="search">
-          Search posts
-        </label>
-        <input
-          id="search"
-          className="input"
-          value={queryInput}
-          onChange={(event) => setQueryInput(event.target.value)}
-          placeholder="Search titles, excerpts, and tags"
-        />
-        <button type="submit" className="btn-primary shrink-0">
-          Search
-        </button>
-      </form>
+      <div className="page-wrap pt-10 sm:pt-14">
+        <div className="flex flex-col gap-6 border-b border-paper-dark pb-8 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-pine-700">
+              Latest writing
+            </p>
+            <h2 className="mt-2 font-serif text-3xl font-semibold tracking-[-0.02em] text-ink">
+              Notes from the field
+            </h2>
+          </div>
 
-      <div className="mt-6 flex flex-wrap justify-center gap-1.5">
+          <form className="flex w-full max-w-md gap-2" onSubmit={onSearch}>
+            <label className="sr-only" htmlFor="search">Search posts</label>
+            <input
+              id="search"
+              className="input"
+              value={queryInput}
+              onChange={(event) => setQueryInput(event.target.value)}
+              placeholder="Search articles"
+            />
+            <button type="submit" className="btn-primary shrink-0">Search</button>
+          </form>
+        </div>
+
+      <div className="mt-6 flex flex-wrap gap-2">
         <TagBadge
           tag="All fields"
           active={!selectedTag}
@@ -99,7 +113,13 @@ export default function Home() {
         ))}
       </div>
 
-      {loading && <Spinner label="Loading posts" />}
+      {loading && (
+        <div className="mt-10 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }, (_, index) => (
+            <PostCardSkeleton key={index} />
+          ))}
+        </div>
+      )}
       {error && (
         <p className="mt-10 text-center text-sm text-red-800">{error}</p>
       )}
@@ -110,7 +130,7 @@ export default function Home() {
         </p>
       )}
 
-      <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
         {pageItems.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
@@ -121,6 +141,7 @@ export default function Home() {
         totalPages={totalPages}
         onChange={(nextPage) => updateParams({ page: String(nextPage) })}
       />
+      </div>
     </div>
   )
 }

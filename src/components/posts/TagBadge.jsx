@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
 
 export default function TagBadge({ tag, to, active = false, onClick }) {
-  const classes = `inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium transition ${
+  const classes = `inline-flex min-h-7 items-center rounded-full border px-3 py-1 text-[0.7rem] font-semibold tracking-wide transition-all duration-200 focus-ring ${
     active
-      ? 'border-pine-800 bg-pine-800 text-paper'
-      : 'border-pine-200 bg-pine-50 text-pine-800 hover:border-pine-700'
+      ? 'border-pine-800 bg-pine-800 text-paper shadow-sm'
+      : 'border-pine-200/80 bg-pine-50/80 text-pine-800 hover:-translate-y-px hover:border-pine-700 hover:bg-pine-100'
   }`
 
   if (onClick) {
